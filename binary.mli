@@ -1,0 +1,1 @@
+val f: out_channel -> Instruction.t -> unit
