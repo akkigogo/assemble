@@ -14,8 +14,25 @@ type token =
   | SUB
   | SW
   | LW
+  | LUI
+  | ORI
   | BNE
   | BEQ
+  | LAHI
+  | LALO
+  | MTC
+  | FADD
+  | FSUB
+  | FMUL
+  | FDIV
+  | FEQ
+  | FLT
+  | SWC
+  | LWC
+  | SQRT
+  | FLOOR
+  | FTOI
+  | ITOF
   | COLON
   | X
   | L

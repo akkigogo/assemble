@@ -26,7 +26,7 @@ bne_else.24:
 	jr	$ra
 _min_caml_start:
 	addi	$sp, $sp, 4096
-	addi	$a0, $zero, 30
+	addi	$a0, $zero, 10
 	sw	$ra, 4($sp)
 	addi	$sp, $sp, 8
 	jal	fib.10

@@ -4,22 +4,33 @@ type pc = int
 type label = string
 type reg = int
 
-type rdRsRt = [ `Add | `Sub | `And | `Or | `Slt ]
-type rtRsImm = [ `Addi | `Slti ]
+type labellis =
+  | Label of label
+  | Labellis of label * labellis
+
+type rdRsRt = [ `Add | `Sub | `And | `Or | `Slt | `Fadd | `Fsub | `Fmul | `Fdiv | `Feq | `Flt ]
+type rsRt = [ `Mtc | `Sqrt | `Floor | `Ftoi | `Itof ]
+type rtRsImm = [ `Addi | `Slti | `Ori ]
+type rtImm = [ `Lui ]
+type loadLabel = [ `Lahi | `Lalo ]
 type rsRtOffset = [ `Beq | `Bne ]
-type rtOffsetBase = [ `Lw | `Sw ]
+type rtOffsetBase = [ `Lw | `Sw | `Lwc | `Swc ]
 type imm26 = [ `J | `Jal ]
 
 type ins = 
   | RdRsRt of rdRsRt * reg * reg * reg
+  | RtRs of rsRt * reg * reg
   | RtRsImm of rtRsImm * reg * reg * int
+  | RtImm of rtImm * reg * int
+  | LoadLabel of loadLabel * reg * label *  pc
   | RtOffsetBase of rtOffsetBase * reg * int * reg
   | RsRtOffset of rsRtOffset * reg * reg * label * pc
   | Imm26 of imm26 * label
-  | Jr of int
+  | Jr of reg
 
 type exp = 
-  | Label of label * pc * ins
+  (* | Label of label * pc * ins *)
+  | Labelandins of labellis * pc * ins
   | Exp of ins
   | Eof of unit
 
