@@ -22,6 +22,8 @@ rule token = parse
   | "slt"           { SLT }
   | "sub"           { SUB }
   | "addi"             { ADDI }
+  | "sll"           { SLL }
+  | "srl"           { SRL }
   | "beq"               { BEQ }
   | "bne"               { BNE }
   | "j"                   { J }
@@ -46,6 +48,10 @@ rule token = parse
   | "floor"           { FLOOR }
   | "ftoi"            { FTOI }
   | "itof"            { ITOF }
+  | "outc"            { OUTC }
+  | "outi"            { OUTI }
+  | "readi"           { READI }
+  | "readf"           { READF }
   |  ","                { X }
   |  "("                { L }
   |  ")"                { R }

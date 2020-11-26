@@ -6,7 +6,8 @@
 %token <string> ID
 %token <int> REG
 
-%token ADD ADDI AND J JR JAL OR SLT SLTI SUB SW LW LUI ORI BNE BEQ LAHI LALO MTC FADD FSUB FMUL FDIV FEQ FLT SWC LWC SQRT FLOOR FTOI ITOF COLON X L R EOF
+%token ADD ADDI AND SLL SRL J JR JAL OR SLT SLTI SUB SW LW LUI ORI BNE BEQ LAHI LALO MTC FADD FSUB FMUL FDIV FEQ FLT SWC LWC SQRT FLOOR FTOI ITOF 
+%token OUTC OUTI READI READF COLON X L R EOF
 
 
 %start startexp
@@ -37,12 +38,14 @@ labellis:
 
 ins:
   | rdRsRt REG X REG X REG  { RdRsRt ($1, $2, $4, $6) }
-  | rtRs REG X REG { RtRs ($1, $2, $4) }
+  | rdRs REG X REG { RdRs ($1, $2, $4) }
+  | rdRtshamt REG X REG X INT { RdRtshamt ($1, $2, $4, $6) }
   | rtRsImm REG X REG X INT { RtRsImm ($1, $2, $4, $6) }
   | rtImm REG X INT { RtImm ($1, $2, $4) }
   | loadLabel REG X ID { LoadLabel ($1, $2, $4, (Parsing.symbol_start_pos ()).pos_lnum) }
   | rsRtOffset REG X REG X ID { RsRtOffset ($1, $2, $4, $6, (Parsing.symbol_start_pos ()).pos_lnum) }
   | rtOffsetBase REG X INT L REG R { RtOffsetBase ($1, $2, $4, $6) }
+  | inout REG { InOut ($1, $2)}
   | imm26 ID { Imm26 ($1, $2) }
   | JR REG { Jr ($2)} 
   ;
@@ -51,8 +54,10 @@ rdRsRt:
   | ADD { `Add } | SUB { `Sub } | AND { `And } | OR { `Or } | SLT { `Slt } 
   | FADD { `Fadd } | FSUB { `Fsub } | FMUL { `Fmul } | FDIV { `Fdiv } | FEQ { `Feq } | FLT { `Flt };
 
+rdRtshamt:
+  | SLL { `Sll } | SRL { `Srl };
 
-rtRs:
+rdRs:
   | MTC { `Mtc } | SQRT { `Sqrt } | FLOOR { `Floor } | FTOI { `Ftoi } | ITOF { `Itof };
 
 rtRsImm:
@@ -67,5 +72,7 @@ loadLabel:
 rsRtOffset: | BEQ { `Beq } | BNE { `Bne } ;
 
 rtOffsetBase: | LW { `Lw } | SW { `Sw } | LWC { `Lwc } | SWC { `Swc } ; 
+
+inout: | OUTC { `Outc } | OUTI { `Outi } | READI { `Readi } | READF { `Readf } ;
 
 imm26: | J { `J } | JAL { `Jal } ;

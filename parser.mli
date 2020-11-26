@@ -5,6 +5,8 @@ type token =
   | ADD
   | ADDI
   | AND
+  | SLL
+  | SRL
   | J
   | JR
   | JAL
@@ -33,6 +35,10 @@ type token =
   | FLOOR
   | FTOI
   | ITOF
+  | OUTC
+  | OUTI
+  | READI
+  | READF
   | COLON
   | X
   | L
