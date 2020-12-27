@@ -1,7 +1,6 @@
 {
   open Parser
   open String
-
 }
 
 let digit = ['0' - '9']
@@ -33,9 +32,9 @@ rule token = parse
   | "sw"                 { SW }
   | "lui"             { LUI }
   | "ori"             { ORI }
-  | "lahi"            { LAHI }
-  | "lalo"            { LALO }
-  | "mtc1"            { MTC }
+  (* | "lahi"            { LAHI } *)
+  (* | "lalo"            { LALO } *)
+  (* | "mtc1"            { MTC } *)
   | "add.s"           { FADD }
   | "sub.s"           { FSUB } 
   | "mul.s"           { FMUL }
@@ -48,6 +47,8 @@ rule token = parse
   | "floor"           { FLOOR }
   | "ftoi"            { FTOI }
   | "itof"            { ITOF }
+  | "flui"            { FLUI }
+  | "fori"            { FORI }
   | "outc"            { OUTC }
   | "outi"            { OUTI }
   | "readi"           { READI }

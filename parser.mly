@@ -6,7 +6,7 @@
 %token <string> ID
 %token <int> REG
 
-%token ADD ADDI AND SLL SRL J JR JAL OR SLT SLTI SUB SW LW LUI ORI BNE BEQ LAHI LALO MTC FADD FSUB FMUL FDIV FEQ FLT SWC LWC SQRT FLOOR FTOI ITOF 
+%token ADD ADDI AND SLL SRL J JR JAL OR SLT SLTI SUB SW LW LUI ORI BNE BEQ FADD FSUB FMUL FDIV FEQ FLT SWC LWC SQRT FLOOR FTOI ITOF FLUI FORI
 %token OUTC OUTI READI READF COLON X L R EOF
 
 
@@ -42,7 +42,7 @@ ins:
   | rdRtshamt REG X REG X INT { RdRtshamt ($1, $2, $4, $6) }
   | rtRsImm REG X REG X INT { RtRsImm ($1, $2, $4, $6) }
   | rtImm REG X INT { RtImm ($1, $2, $4) }
-  | loadLabel REG X ID { LoadLabel ($1, $2, $4, (Parsing.symbol_start_pos ()).pos_lnum) }
+  /* | loadLabel REG X ID { LoadLabel ($1, $2, $4, (Parsing.symbol_start_pos ()).pos_lnum) } */
   | rsRtOffset REG X REG X ID { RsRtOffset ($1, $2, $4, $6, (Parsing.symbol_start_pos ()).pos_lnum) }
   | rtOffsetBase REG X INT L REG R { RtOffsetBase ($1, $2, $4, $6) }
   | inout REG { InOut ($1, $2)}
@@ -58,16 +58,16 @@ rdRtshamt:
   | SLL { `Sll } | SRL { `Srl };
 
 rdRs:
-  | MTC { `Mtc } | SQRT { `Sqrt } | FLOOR { `Floor } | FTOI { `Ftoi } | ITOF { `Itof };
+  | SQRT { `Sqrt } | FLOOR { `Floor } | FTOI { `Ftoi } | ITOF { `Itof };
 
 rtRsImm:
-  | ADDI { `Addi } | SLTI { `Slti } | ORI { `Ori } ;
+  | ADDI { `Addi } | SLTI { `Slti } | ORI { `Ori } | FORI { `Fori };
 
 rtImm: 
-  | LUI { `Lui } ;
+  | LUI { `Lui } | FLUI { `Flui };
 
-loadLabel:
-  | LAHI { `Lahi } | LALO { `Lalo } ;
+/* loadLabel:
+  | LAHI { `Lahi } | LALO { `Lalo } ; */
 
 rsRtOffset: | BEQ { `Beq } | BNE { `Bne } ;
 

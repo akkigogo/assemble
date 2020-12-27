@@ -9,11 +9,11 @@ type labellis =
   | Labellis of label * labellis
 
 type rdRsRt = [ `Add | `Sub | `And | `Or | `Slt | `Fadd | `Fsub | `Fmul | `Fdiv | `Feq | `Flt ]
-type rdRs = [ `Mtc | `Sqrt | `Floor | `Ftoi | `Itof ]
+type rdRs = [ `Sqrt | `Floor | `Ftoi | `Itof ]
 type rdRtshamt = [ `Sll | `Srl ]
-type rtRsImm = [ `Addi | `Slti | `Ori ]
-type rtImm = [ `Lui ]
-type loadLabel = [ `Lahi | `Lalo ]
+type rtRsImm = [ `Addi | `Slti | `Ori | `Fori ]
+type rtImm = [ `Lui | `Flui  ]
+(* type loadLabel = [ `Lahi | `Lalo ] *)
 type rsRtOffset = [ `Beq | `Bne ]
 type rtOffsetBase = [ `Lw | `Sw | `Lwc | `Swc ]
 type inout = [ `Outc | `Outi | `Readi | `Readf ]
@@ -25,7 +25,7 @@ type ins =
   | RdRtshamt of rdRtshamt * reg * reg * int
   | RtRsImm of rtRsImm * reg * reg * int
   | RtImm of rtImm * reg * int
-  | LoadLabel of loadLabel * reg * label *  pc
+  (* | LoadLabel of loadLabel * reg * label *  pc *)
   | RtOffsetBase of rtOffsetBase * reg * int * reg
   | RsRtOffset of rsRtOffset * reg * reg * label * pc
   | InOut of inout * reg
