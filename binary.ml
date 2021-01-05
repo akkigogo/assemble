@@ -34,7 +34,6 @@ let h oc ins =
   | RdRs (`Floor, gp1, gp2) -> Printf.fprintf oc ("010001"); out_bit oc gp2 5; out_bit oc 0 5; out_bit oc gp1 5; out_bit oc 16 5; Printf.fprintf oc ("000101\n");
   | RdRs (`Ftoi, gp1, gp2) -> Printf.fprintf oc ("010001"); out_bit oc gp2 5; out_bit oc 0 5; out_bit oc gp1 5; out_bit oc 16 5; Printf.fprintf oc ("000110\n");
   | RdRs (`Itof, gp1, gp2) -> Printf.fprintf oc ("010001"); out_bit oc gp2 5; out_bit oc 0 5; out_bit oc gp1 5; out_bit oc 16 5; Printf.fprintf oc ("000111\n");
-  (* | RdRs (`Mtc, gp1, gp2) -> Printf.fprintf oc ("010001"); out_bit oc gp2 5; out_bit oc gp1 5; out_bit oc 0 5; out_bit oc 4 5; Printf.fprintf oc ("000000\n"); *)
   | RdRtshamt (`Sll, gp1, gp2, i) -> Printf.fprintf oc ("000000"); out_bit oc 0 5; out_bit oc gp2 5; out_bit oc gp1 5; out_bit oc i 5; Printf.fprintf oc ("000000\n");
   | RdRtshamt (`Srl, gp1, gp2, i) -> Printf.fprintf oc ("000000"); out_bit oc 0 5; out_bit oc gp2 5; out_bit oc gp1 5; out_bit oc i 5; Printf.fprintf oc ("000010\n");
   | RtRsImm (`Addi, gp1, gp2, i) -> Printf.fprintf oc ("001000"); out_bit oc gp2 5; out_bit oc gp1 5; out_bit oc i 16; Printf.fprintf oc ("\n");
@@ -43,12 +42,6 @@ let h oc ins =
   | RtRsImm (`Fori, gp1, gp2, i) -> Printf.fprintf oc ("011101"); out_bit oc gp2 5; out_bit oc gp1 5; out_bit oc i 16; Printf.fprintf oc ("\n");
   | RtImm (`Lui, gp1, i) -> Printf.fprintf oc ("001111"); out_bit oc 0 5; out_bit oc gp1 5; out_bit oc i 16; Printf.fprintf oc ("\n"); 
   | RtImm (`Flui, gp1, i) -> Printf.fprintf oc ("011111"); out_bit oc 0 5; out_bit oc gp1 5; out_bit oc i 16; Printf.fprintf oc ("\n");
-  (* | LoadLabel (`Lahi, gp1, label, i) -> 
-  (try (Printf.fprintf oc ("001111"); out_bit oc 0 5; out_bit oc gp1 5; out_bit oc ((((List.assoc label !label_list) - 1) * 4) / (pow 2 16)) 16; Printf.fprintf oc ("\n");)    (* 擬似命令 実際にはlabel上16ビットをlui *) 
-    with Not_found -> Printf.fprintf stdout "%s\n" label)
-  | LoadLabel (`Lalo, gp1, label, i) -> 
-  (try (Printf.fprintf oc ("001101"); out_bit oc gp1 5; out_bit oc gp1 5; out_bit oc ((((List.assoc label !label_list) - 1) * 4) mod (pow 2 16)) 16; Printf.fprintf oc ("\n");)  擬似命令 実際にはlabel下16ビットをori
-    with Not_found -> Printf.fprintf stdout "%s\n" label) *)
   | RtOffsetBase (`Lw, gp1, i, gp2) -> Printf.fprintf oc ("100011"); out_bit oc gp2 5; out_bit oc gp1 5; out_bit oc i 16; Printf.fprintf oc ("\n");
   | RtOffsetBase (`Sw, gp1, i, gp2) -> Printf.fprintf oc ("101011"); out_bit oc gp2 5; out_bit oc gp1 5; out_bit oc i 16; Printf.fprintf oc ("\n");  
   | RtOffsetBase (`Lwc, gp1, i, gp2) -> Printf.fprintf oc ("110001"); out_bit oc gp2 5; out_bit oc gp1 5; out_bit oc i 16; Printf.fprintf oc ("\n");
@@ -92,9 +85,12 @@ let rec g oc e = match e with
   | Exp (ins1) -> h oc ins1
   
 let rec f oc t' =
-  let t = (f' oc t') in
-  match t with
-  | Elis (t1, e1) ->  f oc t1; g oc e1
-  | E (e1) -> g oc e1
+  let _ = (f' oc t') in
+  let rec f_sub oc  t'' =
+    match t'' with
+    | Elis (t1, e1) ->  f_sub oc t1; g oc e1
+    | E (e1) -> g oc e1
+  in
+  f_sub oc t'
 
 
